@@ -75,7 +75,7 @@ def change_status(request):
     except:
         return ("no change in status")
 @shared_task(bind=True)
-def send_mail_to_owner(request,token):
+def send_mail_to_owner(request,token,email):
     tenentdetails=PropertyDetail.objects.values_list("email","rent_date","rent","phone_number","tenant_name","property_name","bhk","is_paid","rent_token","is_tenant_active","owner","owner__email")
     for userinfo in tenentdetails:
         #get owner email id
@@ -84,9 +84,9 @@ def send_mail_to_owner(request,token):
         timing=datetime.datetime.today()
         month=timing.month
         year=timing.year
-        url="http://127.0.0.1:8000/sms/varify/{}".format(userinfo[8])
-        url=requests.get(url=url)
-        if userinfo[0] is not None and token==userinfo[8]:
+        #url="http://127.0.0.1:8000/sms/varify/{}".format(userinfo[8])
+        #url=requests.get(url=url)
+        if userinfo[0]==email and token==userinfo[8]:
             #curent_site=get_current_site(request)
             subject = "Property {} Rent Paid".format(userinfo[5])
             
