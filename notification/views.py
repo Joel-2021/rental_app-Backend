@@ -28,7 +28,7 @@ def verify_payment_token(request,token):
         if obj.is_paid==False:
             obj.is_paid=True
             obj.save()
-            send_mail_to_owner.delay(token=obj.rent_token)
+            send_mail_to_owner.delay(token=obj.rent_token,email=obj.email)
             #send_email_to_owner.delay(token=obj.rent_token)
             return HttpResponse("Thank you for confirming your rent pay and sent email to owner with same confirmation")
         return HttpResponse("already verified with this user payment")
